@@ -1,0 +1,29 @@
+import React from 'react';
+
+const withScrollTop = WrappedComponent => {
+  return class extends React.Component {
+    state = {
+      scrollTop: 0,
+    }
+
+    componentDidMount() {
+      document.addEventListener('scroll', this.calculteUserScroll);
+
+      this.calculteUserScroll();
+    };
+
+    calculteUserScroll = () => {
+      this.setState({ scrollTop: this.scrollTop() });
+    }
+    
+    scrollTop = () => window.pageYOffset !== undefined
+      ? window.pageYOffset
+      : ((document.documentElement || document.body.parentNode || document.body) as any).scrollTop;
+
+    render() {
+      return <WrappedComponent {...this.props} scrollTop={this.state.scrollTop} />;
+    }
+  }
+};
+
+export default withScrollTop;
